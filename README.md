@@ -1,7 +1,6 @@
-# 🩺 Breast Cancer Detection - PyTorch from Scratch
-Binary classifier to detect breast cancer (Malignant/Benign) built from scratch using PyTorch. Trained on the Wisconsin Breast Cancer Dataset. Deployed on Hugging Face Spaces with Gradio.
+# Breast Cancer Detection
 
-> No `sklearn` classifiers. No pretrained weights. Just tensors, math, and a sigmoid.
+Binary classifier for malignant/benign breast mass prediction — built from scratch in PyTorch, no sklearn classifiers, no pretrained weights.
 
 [![Live Demo](https://img.shields.io/badge/🤗%20HuggingFace-Live%20Demo-yellow)](https://huggingface.co/spaces/puzziii/breast-cancer-detection)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://python.org)
@@ -10,58 +9,96 @@ Binary classifier to detect breast cancer (Malignant/Benign) built from scratch 
 
 ---
 
-## What it does
+## Overview
 
-takes 30 cell nucleus measurements from a breast mass biopsy → predicts **Malignant** or **Benign** with confidence score.
+Takes 30 cell nucleus measurements from a breast mass fine needle aspirate (FNA) → outputs **Malignant** or **Benign** with a confidence score.
 
-built a neural network completely from scratch using raw PyTorch — no high-level trainer APIs, no pretrained anything. every forward pass, loss calculation, and gradient update written by hand.
-
----
-
-## how it works
-
-```
-Input (30 features) → Linear layer → Sigmoid → Binary prediction
-```
-
-- **Loss**: Binary Cross Entropy
-- **Optimizer**: SGD (lr=0.1)
-- **Epochs**: 25
-- **Preprocessing**: StandardScaler + LabelEncoder
+The model is a single-layer neural network written entirely in raw PyTorch — no Trainer APIs, no pretrained weights, no sklearn classifiers. Every forward pass, loss calculation, and gradient update is written by hand.
 
 ---
 
-## stack
+## Architecture
 
-| what | tool |
-|------|------|
-| Model | PyTorch (nn.Module) |
-| UI | Gradio |
-| Deployment | Hugging Face Spaces |
-| Dataset | Wisconsin Breast Cancer |
-| Training | Google Colab |
+```
+Input (30 features)
+    ↓
+nn.Linear(30 → 1)
+    ↓
+Sigmoid activation
+    ↓
+Binary prediction + confidence
+```
+
+| Hyperparameter | Value |
+|---|---|
+| Loss | Binary Cross Entropy |
+| Optimizer | SGD |
+| Learning rate | 0.1 |
+| Epochs | 25 |
+| Preprocessing | StandardScaler + LabelEncoder |
 
 ---
 
-## project structure
+## Dataset
+
+[Wisconsin Breast Cancer Dataset](https://github.com/gscdit/Breast-Cancer-Detection) — 569 samples, 30 real-valued features computed from digitized images of FNA biopsies. Features describe characteristics of cell nuclei: radius, texture, perimeter, area, smoothness, compactness, concavity, symmetry, and fractal dimension.
+
+Labels: `M` (Malignant) · `B` (Benign)
+
+---
+
+## Project Structure
 
 ```
-📦 breast-cancer-detection
-├── app.py                 # gradio interface
-├── train_and_save.py      # training pipeline
-├── model.pt               # saved weights
-├── scaler.pkl             # fitted StandardScaler
-├── classes.pkl            # label encoder classes
+breast-cancer-detection/
+├── app.py                 # Gradio UI and inference logic
+├── train_and_save.py      # Full training pipeline
+├── model.pt               # Saved model weights
+├── scaler.pkl             # Fitted StandardScaler
+├── classes.pkl            # LabelEncoder class mapping
 └── requirements.txt
 ```
 
 ---
 
-## run locally
+## Run Locally
 
 ```bash
-git clone https://github.com/Puzziii/breast-cancer-detection
+git clone https://github.com/your-username/breast-cancer-detection
 cd breast-cancer-detection
 pip install -r requirements.txt
+```
+
+Train the model:
+
+```bash
+python train_and_save.py
+```
+
+Launch the Gradio app:
+
+```bash
 python app.py
 ```
+
+The app runs at `http://localhost:7860`.
+
+---
+
+## Stack
+
+| Layer | Tool |
+|---|---|
+| Model | PyTorch `nn.Module` |
+| UI | Gradio |
+| Deployment | Hugging Face Spaces |
+| Training | Google Colab |
+| Dataset | Wisconsin Breast Cancer |
+
+---
+
+## Notes
+
+This is a learning project — purpose is to understand what happens under the hood of a binary classifier. The architecture is intentionally minimal: one linear layer, one activation, raw gradient updates.
+
+For production medical use, a much more robust validation process, larger dataset, and calibrated uncertainty estimates would be required.
