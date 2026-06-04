@@ -89,7 +89,7 @@ The app runs at `http://localhost:7860`.
 
 | Layer | Tool |
 |---|---|
-| Model | PyTorch `nn.Module` |
+| Model | PyTorch |
 | UI | Gradio |
 | Deployment | Hugging Face Spaces |
 | Training | Google Colab |
